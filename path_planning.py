@@ -1,22 +1,5 @@
 #!/usr/bin/env python
 
-'''
-
-This python file runs a ROS-node of name drone_control which holds the position of e-Drone on the given dummy.
-This node publishes and subsribes the following topics:
-
-		PUBLICATIONS			SUBSCRIPTIONS
-		/drone_command			/whycon/poses
-		/alt_error				/pid_tuning_altitude
-		/pitch_error			/pid_tuning_pitch
-		/roll_error				/pid_tuning_roll
-		/yaw_error				/pid_tuning_yaw
-								/drone_yaw
-
-Rather than using different variables, use list. eg : self.setpoint = [1,2,3,4], where index corresponds to x,y,z and yaw_value...rather than defining self.x_setpoint = 1, self.y_setpoint = 2
-CODE MODULARITY AND TECHNIQUES MENTIONED LIKE THIS WILL HELP YOU GAINING MORE MARKS WHILE CODE EVALUATION.
-'''
-
 # Importing the required libraries
 
 from plutodrone.msg import *
@@ -66,35 +49,8 @@ class Edrone():
 		self.i = 0 			# It is the incrementing variable to switch path points
 		self.g = 1			#It is to publish the requirement of next goal
 
-		#initial setting of Kp, Kd and ki for [pitch, roll, throttle, yaw]. eg: self.Kp[2] corresponds to Kp value in throttle axis
-		#after tuning and computing corresponding PID parameters, change the parameters
 
-		 # whycon marker at the position of the dummy given in the scene. Make the whycon marker associated with position_to_hold dummy renderable and make changes accordingly
-
-
-
-		#-----------------------Add other required variables for pid here ----------------------------------------------
-
-
-
-
-
-
-
-
-		# Hint : Add variables for storing previous errors in each axis, like self.prev_values = [0,0,0,0] where corresponds to [pitch, roll, throttle, yaw]
-		#		 Add variables for limiting the values like self.max_values = [1800,1800,1800,1800] corresponding to [pitch, roll, throttle, yaw]
-		#													self.min_values = [1200,1200,1200,1200] corresponding to [pitch, roll, throttle, yaw]
-		#																	You can change the upper limit and lower limit accordingly.
-		#----------------------------------------------------------------------------------------------------------
-
-		# This is the sample time in which you need to run pid. Choose any time which you seem fit. Remember the stimulation step time is 50 ms
-		self.sample_time = 0.060 # in seconds
-
-
-
-
-
+		self.sample_time = 0.060 # in second
 
 
 		# Publishing /drone_command, /alt_error, /pitch_error, /roll_error, /yaw_error
@@ -306,34 +262,6 @@ class Edrone():
 
 		if self.cmd.rcThrottle < self.max_values[0]:
 			self.cmd.rcThrottle = self.max_values[0]
-
-		
-		
-
-		
-		
-	#-----------------------------Write the PID algorithm here--------------------------------------------------------------
-
-	# Steps:
-	# 	1. Compute error in each axis. eg: error[0] = self.drone_position[0] - self.setpoint[0] ,where error[0] corresponds to error in x...
-	#	2. Compute the error (for proportional), change in error (for derivative) and sum of errors (for integral) in each axis. Refer Getting_familiar_with_PID.pdf to understand PID equation.
-	#	3. Calculate the pid output required for each axis. For eg: calcuate self.out_roll, self.out_pitch, etc.
-	#	4. Reduce or add this computed output value on the avg value ie 1500. For eg: self.cmd.rcRoll = 1500 + self.out_roll. LOOK OUT FOR SIGN (+ or -). EXPERIMENT AND FIND THE CORRECT SIGN
-	#	5. Don't run the pid continously. Run the pid only at the a sample time. self.sampletime defined above is for this purpose. THIS IS VERY IMPORTANT.
-	#	6. Limit the output value and the final command value between the maximum(1800) and minimum(1200)range before publishing. For eg : if self.cmd.rcPitch > self.max_values[1]:
-	#																														self.cmd.rcPitch = self.max_values[1]
-	#	7. Update previous errors.eg: self.prev_error[1] = error[1] where index 1 corresponds to that of pitch (eg)
-	#	8. Add error_sum
-
-
-
-
-
-
-
-
-
-	#------------------------------------------------------------------------------------------------------------------------
 
 
 
